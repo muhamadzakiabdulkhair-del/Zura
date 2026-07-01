@@ -244,6 +244,36 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);}
 .carousel-counter{
   text-align:center;font-size:0.78rem;color:#B07ECD;font-weight:700;margin-top:6px;
 }
+
+/* MUSIC PICKER */
+#musicPicker{
+  position:fixed;inset:0;z-index:99999;
+  background:rgba(255,240,250,0.96);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:24px;padding:32px;
+}
+#musicPicker.hidden{display:none;}
+.mp-title{font-family:'Pacifico',cursive;font-size:1.6rem;color:var(--accent);text-align:center;}
+.mp-sub{color:#9B7EAD;font-size:0.9rem;font-weight:700;text-align:center;}
+.mp-btns{display:flex;flex-direction:column;gap:12px;width:100%;max-width:280px;}
+.mp-btn{
+  padding:16px 20px;border:none;border-radius:20px;
+  background:#fff;border:2.5px solid var(--pink);
+  font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;
+  color:var(--accent);cursor:pointer;
+  box-shadow:0 4px 16px rgba(232,126,161,0.18);
+  transition:transform 0.15s,box-shadow 0.15s,background 0.15s;
+  display:flex;align-items:center;gap:10px;
+}
+.mp-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(232,126,161,0.28);
+  background:var(--soft);
+}
+.mp-btn .mp-icon{font-size:1.4rem;}
+.mp-btn .mp-info{text-align:left;}
+.mp-btn .mp-info span{display:block;font-size:0.72rem;color:#B07ECD;font-weight:600;}
+.mp-note{font-size:0.75rem;color:#CBA8C8;font-weight:600;text-align:center;}
 </style>
 </head>
 <body>
@@ -406,7 +436,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);}
         <div class="carousel-slide">
           <div class="polaroid">
             <img src="https://i.imgur.com/P8tV7Tf.jpeg" alt="Hadiah untukmu, Zura 6">
-            <div class="cap">yang ini anmoali mu~ 🌸</div>
+            <div class="cap">Ini untukmu, Zura~ 🌸</div>
           </div>
         </div>
         </div>
@@ -433,7 +463,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);}
 <div class="page" id="page3">
   <div class="msg-wrap">
     <h2 class="msg-title">💌 Untuk Kamu</h2>
-    <p class="msg-subtitle">Zura, baca pelan-pelan ya... 🌸</p>
+    <p class="msg-subtitle">Zura, baca pelan-pelan ya~ 🌸</p>
     <div class="msg-card">
       <p class="msg-line">Haii Zura... 👉👈</p>
       <p class="msg-line">ya kamu, <strong>Azura Septin Arlina</strong> yang lagi baca ini.</p>
@@ -867,6 +897,37 @@ function goToSlide(i){
   });
 })();
 
+
+// MUSIC PICKER
+function pickMusic(url, btn){
+  // visual feedback
+  document.querySelectorAll('.mp-btn').forEach(b=>b.style.opacity='0.5');
+  btn.style.opacity='1';
+  btn.style.background='var(--soft)';
+  btn.innerHTML = btn.innerHTML.replace(btn.querySelector('.mp-icon').textContent, '▶️');
+
+  const audio = document.getElementById('bgMusic');
+  const src = document.getElementById('bgMusicSrc');
+  src.src = url;
+  audio.load();
+
+  // fade in music
+  audio.volume = 0;
+  audio.play().then(()=>{
+    let vol = 0;
+    const fadeIn = setInterval(()=>{
+      vol += 0.05;
+      if(vol >= 0.35){ audio.volume = 0.35; clearInterval(fadeIn); }
+      else audio.volume = vol;
+    }, 100);
+  }).catch(()=>{});
+
+  // hide picker after short delay
+  setTimeout(()=>{
+    document.getElementById('musicPicker').classList.add('hidden');
+  }, 800);
+}
+
 window.addEventListener('resize',setCatPos);
 </script>
 
@@ -878,5 +939,34 @@ window.addEventListener('resize',setCatPos);
     <div class="spop-sub" id="spopSub">💕</div>
   </div>
 </div>
+
+<!-- AUDIO PLAYER -->
+<audio id="bgMusic" loop>
+  <source id="bgMusicSrc" src="" type="audio/mpeg">
+</audio>
+
+<!-- MUSIC PICKER -->
+<div id="musicPicker">
+  <div class="mp-title">🎵 Pilih lagumu~</div>
+  <div class="mp-sub">Lagu ini akan menemanimu sepanjang perjalanan ✨</div>
+  <div class="mp-btns">
+    <button class="mp-btn" onclick="pickMusic('https://drive.google.com/uc?export=download&id=1rulcnOr0wm1IeqcxRBhjQpaQcVQgqoDU', this)">
+      <span class="mp-icon">🌙</span>
+      <div class="mp-info">
+        In Another Life
+        <span>melankolis • penuh harapan</span>
+      </div>
+    </button>
+    <button class="mp-btn" onclick="pickMusic('https://drive.google.com/uc?export=download&id=1h6UwiGdWAN_aSt-6qp5Elv-h6C0Gvu8J', this)">
+      <span class="mp-icon">🌸</span>
+      <div class="mp-info">
+        Baby
+        <span>manis • hangat • sweet</span>
+      </div>
+    </button>
+  </div>
+  <div class="mp-note">🔈 Pastikan volume HP kamu sudah nyala ya~</div>
+</div>
+
 </body>
 </html>
