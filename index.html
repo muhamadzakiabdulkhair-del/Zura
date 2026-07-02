@@ -165,7 +165,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);}
 
 /* ── STICKER POPUP ── */
 #stickerPop{
-  position:fixed;inset:0;z-index:9999;
+  position:fixed;inset:0;z-index:999999;
   display:flex;align-items:center;justify-content:center;
   pointer-events:none;
   opacity:0;
@@ -279,6 +279,15 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);}
 <body>
 <div class="bubbles" id="bubbles"></div>
 <div class="heart-rain" id="heartRain"></div>
+
+<!-- STICKER POPUP -->
+<div id="stickerPop">
+  <div class="spop-box">
+    <span class="spop-anim" id="spopAnim">🥺</span>
+    <div class="spop-txt" id="spopTxt">Makasih ya Zur~</div>
+    <div class="spop-sub" id="spopSub">💕</div>
+  </div>
+</div>
 
 <!-- PAGE 1 -->
 <div class="page active" id="page1">
@@ -840,13 +849,15 @@ function showSpop(i){
   spopTimer = setTimeout(()=>{ pop.classList.remove('show'); }, 2800);
 }
 
-['a1','a2','a3','a4','a5'].forEach((id,i)=>{
-  const el = document.getElementById(id);
-  if(el){
-    el.addEventListener('blur', ()=>{
-      if(el.value.trim().length >= 3) showSpop(i);
-    });
-  }
+window.addEventListener('load', ()=>{
+  ['a1','a2','a3','a4','a5'].forEach((id,i)=>{
+    const el = document.getElementById(id);
+    if(el){
+      el.addEventListener('blur', ()=>{
+        if(el.value.trim().length >= 3) showSpop(i);
+      });
+    }
+  });
 });
 
 
